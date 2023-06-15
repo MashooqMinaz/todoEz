@@ -1,0 +1,149 @@
+<section class="h-screen w-screen overflow-hidden">
+
+  <nav class="w-full">
+    <mat-toolbar class="bg-blue-500">
+      <button mat-icon-button (click)="drawer.toggle()">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <span>My App</span>
+      <span class="flex-1"></span>
+      <button mat-icon-button class="example-icon favorite-icon">
+        <mat-icon>favorite</mat-icon>
+      </button>
+      <button mat-icon-button class="example-icon">
+        <mat-icon>share</mat-icon>
+      </button>
+    </mat-toolbar>
+  </nav>
+
+  <mat-drawer-container class="h-full w-full" autosize>
+    <mat-drawer #drawer mode="side" class="w-96">
+      <div class="h-full w-full p-6 transition-transform -translate-x-full bg-teal-200/40 sm:translate-x-0 ">
+        <div class="flex flex-col gap-3">
+          <div class="flex items-center  gap-2 bg-white p-2 rounded-xl hover:bg-blue-400">
+            <mat-icon class="ml-14">home</mat-icon>
+            home
+          </div>
+          <div class="flex items-center  gap-2 bg-white p-2 rounded-xl hover:bg-blue-400">
+            <mat-icon class="ml-14">star</mat-icon>
+            Favorite
+          </div>
+          <div class="flex items-center  gap-2 bg-white p-2 rounded-xl hover:bg-blue-400">
+            <mat-icon class="ml-14">flag</mat-icon>
+            Important
+          </div>
+        </div>
+      </div>
+    </mat-drawer>
+
+    <section #contents class="bg-red-200 w-full h-full p-8">
+
+      <!-- new-task-btn -->
+      <div class="w-full flex justify-center">
+        <button mat-raised-button>
+          <!-- (click)="openDialog()" -->
+          <mat-icon>add</mat-icon>
+          Add New Task
+        </button>
+      </div>
+
+      <div cdkDropListGroup class="mt-8 w-full h-5/6 grid grid-cols-3 gap-8">
+
+        <!-- to-do -->
+        <div class="bg-yellow-200">
+          <div class="w-full mr-6 mb-6">
+            <h2>To do</h2>
+
+            <div
+              cdkDropList
+              [cdkDropListData]="todo"
+              class="border-[1px] border-[#ccc] min-h-[60px] bg-white rounded overflow-hidden block"
+              (cdkDropListDropped)="drop($event)">
+              <div class="py-5 px-[10px] border-b-[1px] border-[#ccc] text-black/90 flex flex-row items-center justify-between cursor-move bg-white text-sm"
+              *ngFor="let item of todo" cdkDrag>{{item}}</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- inprogress -->
+        <div class="bg-blue-200">
+          <div class="w-full mr-6 mb-6">
+            <h2>In progress</h2>
+
+            <div
+              cdkDropList
+              [cdkDropListData]="inprogress"
+              class="border-[1px] border-[#ccc] min-h-[60px] bg-white rounded overflow-hidden block"
+              (cdkDropListDropped)="drop($event)">
+              <div class="py-5 px-[10px] border-b-[1px] border-[#ccc] text-black/90 flex flex-row items-center justify-between cursor-move bg-white text-sm"
+              *ngFor="let item of inprogress" cdkDrag>{{item}}</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- done -->
+        <div class="bg-orange-300">
+          <div class="w-full mr-6 mb-6">
+            <h2>Done</h2>
+
+            <div
+              cdkDropList
+              [cdkDropListData]="done"
+              class="border-[1px] border-[#ccc] min-h-[60px] bg-white rounded overflow-hidden block"
+              (cdkDropListDropped)="drop($event)">
+              <div class="py-5 px-[10px] border-b-[1px] border-[#ccc] text-black/90 flex flex-row items-center justify-between cursor-move bg-white text-sm"
+              *ngFor="let item of done" cdkDrag>{{item}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+
+
+      <section class="w-[586px] absolute top-[34rem] right-[48rem] bg-slate-500/40">
+        <h1 mat-dialog-title class="text-xl">Add New Task</h1>
+        <form [formGroup]="todoForm">
+          <div mat-dialog-content class="w-full">
+            <mat-form-field class="w-full">
+              <mat-label>Choose a heading</mat-label>
+              <input matInput formControlName="heading" placeholder="eg: Figma" class="w-full text-lg">
+            </mat-form-field>
+            <mat-form-field class="w-full">
+              <mat-label>Write the description</mat-label>
+              <textarea matInput formControlName="description" placeholder="eg: Need to create a figma design" class="min-h-[80px] text-lg"></textarea>
+            </mat-form-field>
+          </div>
+          <div class="flex justify-between mx-auto pl-6 pr-5 mb-4">
+            <div class="flex items-center gap-2">
+              <button mat-icon-button matTooltip="Important" matTooltipShowDelay="500" matTooltipClass="custom-tooltip" matTooltipPosition="above" class="w-6 h-6 flex items-center justify-center focus:bg-gray-300">
+                <p class="text-3xl text-important">•</p>
+              </button>
+              <button mat-icon-button  matTooltip="Irrelevent" matTooltipShowDelay="500" matTooltipClass="custom-tooltip" matTooltipPosition="above" class="w-6 h-6 flex items-center justify-center focus:bg-gray-300">
+                <p class="text-3xl text-irrelevent">•</p>
+              </button>
+              <button mat-icon-button  matTooltip="Default" matTooltipShowDelay="500" matTooltipClass="custom-tooltip" matTooltipPosition="above"  class="w-6 h-6 flex items-center justify-center focus:bg-gray-300">
+                <p class="text-3xl text-default">•</p>
+              </button>
+            </div>
+            <div mat-dialog-actions>
+              <button mat-button >No Thanks</button>
+              <!-- (click)="onNoClick()" -->
+              <button mat-raised-button color="primary" [disabled]="todoForm.invalid">Ok</button>
+            </div>
+          </div>
+        </form>
+
+      </section>
+
+    </section>
+
+
+
+
+    <!-- NEW-TASK-POP-UP -->
+
+
+  </mat-drawer-container>
+</section>
